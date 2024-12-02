@@ -26,7 +26,7 @@ def parse_file(path):
 
 def condition(report):
 
-  if len(report)==1:
+  if len(report)<=1:
     return True
 
   sgn = sign(report[0]-report[1])
