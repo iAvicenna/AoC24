@@ -13,12 +13,9 @@ cwd = Path(__file__).parent
 
 def parse_file(path):
 
+  process = lambda x: list(map(int, x.strip("\n").split()))
+  
   with path as fp:
-
-    reports = []
-
-    process = lambda x: list(map(int, x.strip("\n").split()))
-
     reports = list(map(process,fp))
 
   return reports
