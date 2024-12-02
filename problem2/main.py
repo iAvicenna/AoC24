@@ -15,7 +15,7 @@ def parse_file(path):
 
   process = lambda x: list(map(int, x.strip("\n").split()))
   
-  with path as fp:
+  with path.open("r") as fp:
     reports = list(map(process,fp))
 
   return reports
@@ -41,14 +41,14 @@ def loo_condition(report):
 
 def solve_problem1(file):
 
-  reports = parse_file(Path(cwd, file).open("r"))
+  reports = parse_file(Path(cwd, file))
 
   return sum(map(condition, reports))
 
 
 def solve_problem2(file):
 
-  reports = parse_file(Path(cwd, file).open("r"))
+  reports = parse_file(Path(cwd, file))
 
   return sum(map(loo_condition, reports))
 
