@@ -6,11 +6,8 @@ Created on Mon Dec  2 09:37:59 2024
 @author: avicenna
 """
 
-import re
-
 from pathlib import Path
 cwd = Path(__file__).parent
-
 
 def parse_instructions(path):
 
@@ -21,13 +18,11 @@ def parse_instructions(path):
 
 def clean_instructions(corrupted_instructions):
 
-  pattern = "(mul)\((\d{1,3}),(\d{1,3})\)"
-  instructions = list(re.findall(pattern, corrupted_instructions))
+  parts = [tuple(x.split(')')[0].split(',')) for x in corrupted_instructions.split("mul(")
+           if ')' in x and x.index(')')>2 and ',' in x and x.index(',')>0 and
+           all(e.isnumeric() or e==',' for e in x[:x.index(')')])]
 
-  if len(instructions)==0:
-    return 0
-
-  return sum([int(num1)*int(num2) for _,num1,num2 in instructions])
+  return sum([int(num0)*int(num1) for num0,num1 in parts])
 
 def solve_problem1(file_name):
 
@@ -49,6 +44,7 @@ def solve_problem2(file_name):
 
 
 if __name__ == "__main__":
+  # REGEXP FREE
 
   result = solve_problem1("test_input3-1")
   print(f"test 3-1: {result}")
