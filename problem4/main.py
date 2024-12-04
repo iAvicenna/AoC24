@@ -12,7 +12,7 @@ from pathlib import Path
 cwd = Path(__file__).parent
 
 
-def parse_instructions(path):
+def parse_puzzle(path):
 
   with path.open("r") as fp:
     data = fp.read().splitlines()
@@ -45,7 +45,7 @@ def solve_problem1(file_name):
 
   path = Path(cwd, file_name)
 
-  grid = parse_instructions(path)
+  grid = parse_puzzle(path)
   n0,n1 = grid.shape
   target = "XMAS"
 
@@ -68,7 +68,7 @@ def solve_problem2(file_name):
 
   path = Path(cwd, file_name)
 
-  grid = parse_instructions(path)
+  grid = parse_puzzle(path)
   n0,n1 = grid.shape
   target = {'MAS','SAM'}
 
@@ -90,7 +90,6 @@ def solve_problem2(file_name):
           counter += 1
 
   return counter
-
 
 
 if __name__ == "__main__":
