@@ -31,10 +31,10 @@ def get_windows(irow, icol, n0, n1):
     if d0==0 and d1==0:
       continue
 
-    J0 = np.array([irow + d0*i for i in range(4)])
-    J1 = np.array([icol + d1*i for i in range(4)])
+    J0 = np.array([irow + d0*i for i in range(4) if irow + d0*i>=0 and irow + d0*i<n0])
+    J1 = np.array([icol + d1*i for i in range(4) if icol + d1*i>=0 and icol + d1*i<n1])
 
-    if np.all(J0<n0) & np.all(J0>=0) &  np.all(J1<n1) & np.all(J1>=0):
+    if J0.size==4 and J1.size==4:
       I0 += list(J0)
       I1 += list(J1)
 
@@ -47,7 +47,7 @@ def solve_problem1(file_name):
 
   grid = parse_instructions(path)
   n0,n1 = grid.shape
-  target = np.array(['X','M','A','S'])
+  target = "XMAS"
 
   counter = 0
 
@@ -58,7 +58,7 @@ def solve_problem1(file_name):
       convs = grid[tuple([r,c])]
 
       counter += len([ind0 for ind0 in range(0, len(r), 4)
-                      if np.all(convs[ind0:ind0+4]==target)])
+                      if "".join(convs[ind0:ind0+4])==target])
 
 
   return counter
@@ -70,7 +70,7 @@ def solve_problem2(file_name):
 
   grid = parse_instructions(path)
   n0,n1 = grid.shape
-  target = np.array(['M','A','S'])
+  target = {'MAS','SAM'}
 
   w1 = tuple([[0, 1, 2], [0, 1, 2]])
   w2 = tuple([[0, 1, 2], [2, 1, 0]])
@@ -86,8 +86,7 @@ def solve_problem2(file_name):
       if np.all(I0>=0) & np.all(I0<n0) & np.all(I1>=0) & np.all(I1<n1):
         conv = grid[irow:irow+3, icol:icol+3]
 
-        if (np.all(conv[w1] == target) or np.all(conv[w1]==target[::-1])) and\
-          (np.all(conv[w2] == target) or np.all(conv[w2]==target[::-1])):
+        if set([''.join(conv[w1]),''.join(conv[w2])]).issubset(target):
           counter += 1
 
   return counter
