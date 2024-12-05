@@ -6,11 +6,10 @@ Created on Thu Dec  5 08:28:46 2024
 @author: avicenna
 """
 
-import numpy as np
+from math import floor
 from pathlib import Path
 from functools import partial, cmp_to_key
 cwd = Path(__file__).parent
-
 
 def parse_protocol(path):
 
@@ -41,7 +40,7 @@ def sort_pages(pages, page_to_rule):
 
 def get_updates(updates, page_to_rule, fix):
 
-  to_print = [temp_p[int(np.floor(len(pages)/2))] for pages in updates
+  to_print = [temp_p[int(floor(len(pages)/2))] for pages in updates
               if (not fix and (temp_p:=pages) == sort_pages(pages, page_to_rule))
               or (fix and (temp_p:=sort_pages(pages, page_to_rule)) != pages)]
 
