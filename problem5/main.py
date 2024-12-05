@@ -39,50 +39,36 @@ def sort_pages(pages, page_to_rule):
   return sorted(pages, key = cmp_to_key(cmp))
 
 
-def check_and_get_updates(updates, page_to_rule):
+def get_updates(updates, page_to_rule, fix):
 
-  to_print = [pages[int(np.floor(len(pages)/2))] for pages in updates
-              if pages==sort_pages(pages, page_to_rule)]
-
-  return sum(map(int,to_print))
-
-
-def correct_and_get_updates(updates, page_to_rule):
-
-  to_print = [sorted_pages[int(np.floor(len(pages)/2))] for pages in updates
-              if (sorted_pages:=sort_pages(pages,page_to_rule)) != pages]
+  to_print = [temp_p[int(np.floor(len(pages)/2))] for pages in updates
+              if (not fix and (temp_p:=pages) == sort_pages(pages, page_to_rule))
+              or (fix and (temp_p:=sort_pages(pages, page_to_rule)) != pages)]
 
   return sum(map(int,to_print))
 
 
-def solve_problem1(file_name):
+def solve_problem(file_name, fix):
 
   page_to_rule, updates = parse_protocol(Path(cwd, file_name))
 
-  return check_and_get_updates(updates, page_to_rule)
-
-
-def solve_problem2(file_name):
-
-  page_to_rule, updates = parse_protocol(Path(cwd, file_name))
-
-  return correct_and_get_updates(updates, page_to_rule)
+  return get_updates(updates, page_to_rule, fix)
 
 
 if __name__ == "__main__":
 
-  result = solve_problem1("test_input5")
+  result = solve_problem("test_input5", False)
   print(f"test 5-1: {result}")
   assert result==143
 
-  result = solve_problem1("input5")
+  result = solve_problem("input5", False)
   print(f"problem 5-1: {result}")
   assert result==5452
 
-  result = solve_problem2("test_input5")
+  result = solve_problem("test_input5", True)
   print(f"test 5-2: {result}")
   assert result==123
 
-  result = solve_problem2("input5")
+  result = solve_problem("input5", True)
   print(f"problem 5-2: {result}")
   assert result==4598
