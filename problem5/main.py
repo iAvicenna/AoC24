@@ -41,25 +41,16 @@ def sort_pages(pages, page_to_rule):
 
 def check_and_get_updates(updates, page_to_rule):
 
-  to_print = []
-
-  for pages in updates:
-    if pages == sort_pages(pages, page_to_rule):
-      to_print.append(pages[int(np.floor(len(pages)/2))])
+  to_print = [pages[int(np.floor(len(pages)/2))] for pages in updates
+              if pages==sort_pages(pages, page_to_rule)]
 
   return sum(map(int,to_print))
 
 
 def correct_and_get_updates(updates, page_to_rule):
 
-  to_print = []
-
-  for pages in updates:
-
-    sorted_pages = sort_pages(pages, page_to_rule)
-
-    if pages != sorted_pages:
-      to_print.append(sorted_pages[int(np.floor(len(sorted_pages)/2))])
+  to_print = [sorted_pages[int(np.floor(len(pages)/2))] for pages in updates
+              if (sorted_pages:=sort_pages(pages,page_to_rule)) != pages]
 
   return sum(map(int,to_print))
 
