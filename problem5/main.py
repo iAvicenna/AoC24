@@ -11,6 +11,7 @@ from pathlib import Path
 from functools import partial, cmp_to_key
 cwd = Path(__file__).parent
 
+
 def parse_protocol(path):
 
   with path.open("r") as fp:
@@ -25,33 +26,23 @@ def parse_protocol(path):
   return page_to_rule, updates
 
 
-def compare_pages(pr, page1, page2):
-
-  if page1 not in pr or page2 not in pr[page1]:
-    return 0
-  return -1
-
-
 def sort_pages(pages, page_to_rule):
 
-  cmp = partial(compare_pages, page_to_rule)
-  return sorted(pages, key = cmp_to_key(cmp))
+  compare_pages = lambda page1, page2:\
+    0 if page1 not in page_to_rule or page2 not in page_to_rule[page1] else -1
 
-
-def get_updates(updates, page_to_rule, fix):
-
-  to_print = [temp_p[int(floor(len(pages)/2))] for pages in updates
-              if (not fix and (temp_p:=pages) == sort_pages(pages, page_to_rule))
-              or (fix and (temp_p:=sort_pages(pages, page_to_rule)) != pages)]
-
-  return sum(map(int,to_print))
+  return sorted(pages, key = cmp_to_key(compare_pages))
 
 
 def solve_problem(file_name, fix):
 
   page_to_rule, updates = parse_protocol(Path(cwd, file_name))
 
-  return get_updates(updates, page_to_rule, fix)
+  to_print = [temp_p[int(floor(len(pages)/2))] for pages in updates
+              if (not fix and (temp_p:=pages) == sort_pages(pages, page_to_rule))
+              or (fix and (temp_p:=sort_pages(pages, page_to_rule)) != pages)]
+
+  return sum(map(int,to_print))
 
 
 if __name__ == "__main__":
