@@ -6,7 +6,6 @@ Created on Thu Dec  5 08:28:46 2024
 @author: avicenna
 """
 
-from math import floor
 from pathlib import Path
 from functools import cmp_to_key
 cwd = Path(__file__).parent
@@ -38,7 +37,7 @@ def solve_problem(file_name, fix):
 
   page_to_rule, updates = parse_protocol(Path(cwd, file_name))
 
-  to_print = [temp_p[int(floor(len(pages)/2))] for pages in updates
+  to_print = [temp_p[int(len(pages)//2)] for pages in updates
               if (not fix and (temp_p:=pages) == sort_pages(pages, page_to_rule))
               or (fix and (temp_p:=sort_pages(pages, page_to_rule)) != pages)]
 
