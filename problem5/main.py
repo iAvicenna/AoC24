@@ -18,26 +18,18 @@ def parse_protocol(path):
     data = fp.read().splitlines()
 
   rules = data[:data.index('')]
-  pages = list(map(lambda x: x.split(','), data[data.index('')+1:]))
-
-  return rules, pages
-
-
-def rule_dict(rules):
-
   page_to_rule = {r.split('|')[0]:[] for r in rules}
   [page_to_rule[r.split('|')[0]].append(r.split('|')[1]) for r in rules]
 
-  return page_to_rule
+  updates = list(map(lambda x: x.split(','), data[data.index('')+1:]))
+
+  return page_to_rule, updates
 
 
-def compare_pages(pages, page_to_rule, indp1, indp2):
+def compare_pages(pages, pr, indp1, indp2):
 
-  if pages[indp1] not in page_to_rule:
+  if pages[indp1] not in pr or pages[indp2] not in pr[pages[indp1]]:
     return 0
-
-  if pages[indp2] not in page_to_rule[pages[indp1]]:
-    return int(indp1>indp2)
 
   return -1
 
@@ -78,18 +70,14 @@ def correct_and_get_updates(updates, page_to_rule):
 
 def solve_problem1(file_name):
 
-  rules, updates = parse_protocol(Path(cwd, file_name))
-
-  page_to_rule = rule_dict(rules)
+  page_to_rule, updates = parse_protocol(Path(cwd, file_name))
 
   return check_and_get_updates(updates, page_to_rule)
 
 
 def solve_problem2(file_name):
 
-  rules, updates = parse_protocol(Path(cwd, file_name))
-
-  page_to_rule = rule_dict(rules)
+  page_to_rule, updates = parse_protocol(Path(cwd, file_name))
 
   return correct_and_get_updates(updates, page_to_rule)
 
