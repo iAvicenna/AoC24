@@ -8,7 +8,7 @@ Created on Thu Dec  5 08:28:46 2024
 
 from math import floor
 from pathlib import Path
-from functools import partial, cmp_to_key
+from functools import cmp_to_key
 cwd = Path(__file__).parent
 
 
