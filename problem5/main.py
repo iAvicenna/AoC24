@@ -82,7 +82,6 @@ def solve_problem2(file_name):
   return correct_and_get_updates(updates, page_to_rule)
 
 
-
 if __name__ == "__main__":
 
   result = solve_problem1("test_input5")
@@ -100,5 +99,3 @@ if __name__ == "__main__":
   result = solve_problem2("input5")
   print(f"problem 5-2: {result}")
   assert result==4598
-
-  #5059 too high
