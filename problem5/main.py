@@ -26,21 +26,17 @@ def parse_protocol(path):
   return page_to_rule, updates
 
 
-def compare_pages(pages, pr, indp1, indp2):
+def compare_pages(pr, page1, page2):
 
-  if pages[indp1] not in pr or pages[indp2] not in pr[pages[indp1]]:
+  if page1 not in pr or page2 not in pr[page1]:
     return 0
-
   return -1
 
 
 def sort_pages(pages, page_to_rule):
 
-  cmp = partial(compare_pages, pages, page_to_rule)
-  key = cmp_to_key(cmp)
-
-  sorted_page_indices = sorted(range(len(pages)), key=key)
-  return [pages[i] for i in sorted_page_indices]
+  cmp = partial(compare_pages, page_to_rule)
+  return sorted(pages, key = cmp_to_key(cmp))
 
 
 def check_and_get_updates(updates, page_to_rule):
