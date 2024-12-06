@@ -23,10 +23,6 @@ direction_change = {
   }
 
 
-def add_tup2D(tup1, tup2):
-
-  return tuple([tup1[i] + tup2[i] for i in range(2)])
-
 class Guard():
 
   def __init__(self, name, initial_position, initial_direction):
@@ -34,6 +30,7 @@ class Guard():
     self.directions = [initial_direction]
     self.path = [tuple(initial_position)]
     self.state = 0 #0: moving, 1: out, 2: loop
+
 
   def set_marked_map(self, shape): # for problem 2
     self.marked_map = np.empty(shape,dtype=object)
@@ -45,7 +42,10 @@ class Guard():
 
   def move(self, lab_map, check_loop=False):
 
-    next_position = add_tup2D(self.path[-1], direction_change[self.directions[-1]])
+    next_position = tuple([self.path[-1][i] +
+                           direction_change[self.directions[-1]][i]
+                           for i in range(2)])
+
     self.check_state(1, next_position, lab_map.shape)
 
     if self.state ==1:
@@ -79,13 +79,21 @@ class Guard():
       if self.directions[-1] in self.marked_map[self.path[-1]]:
         self.state = 2
 
-  def reset(self):
+  def reset(self, initial_pos, initial_dir):
 
     for pos in self.path:
       self.marked_map[pos] = set()
 
-    self.directions = self.directions[0:1]
-    self.path = self.path[0:1]
+    if initial_dir is None:
+      self.directions = self.directions[0:1]
+    else:
+      self.directions = [initial_dir]
+
+    if initial_pos is None:
+      self.path = self.path[0:1]
+    else:
+      self.path = [initial_pos]
+
     self.state = 0
 
 def parse_input(path):
@@ -124,17 +132,25 @@ def solve_problem2(file_name, verbose=False):
     terminated = guard.move(lab_map)
 
   nobstacles = 0
-  positions = sorted(list(set(guard.path[1:])))
+  path = guard.path.copy()
+  directions = guard.directions.copy()
 
-  for indp,pos in enumerate(positions):
+  # subset to unique positions
+  I = sorted(list(set([path.index(pos) for pos in set(path)])))
+  path = [path[i] for i in I]
+  directions = [directions[i] for i in I]
+
+  # place obstacles on the path
+  for indp,pos in enumerate(path[1:], start=1):
 
     if indp%100==0 and verbose:
-      print(f"%{np.round(100*indp/len(positions),2)}".ljust(10), end="\r")
+      print(f"%{np.round(100*indp/len(path),2)}".ljust(10), end="\r")
 
     copy_map = lab_map.copy()
     copy_map[pos] = '#'
 
-    guard.reset()
+    # we do not need to re-traverse the previous steps
+    guard.reset(path[indp-1], directions[indp-1])
 
     terminated = False
 
@@ -149,17 +165,17 @@ def solve_problem2(file_name, verbose=False):
 
 if __name__ == "__main__":
 
-  # result = solve_problem1("test_input6")
-  # print(f"test 6-1: {result}")
-  # assert result==41
+  result = solve_problem1("test_input6")
+  print(f"test 6-1: {result}")
+  assert result==41
 
-  # result = solve_problem1("input6")
-  # print(f"problem 6-1: {result}")
-  # assert result==5531
+  result = solve_problem1("input6")
+  print(f"problem 6-1: {result}")
+  assert result==5531
 
-  # result = solve_problem2("test_input6", False)
-  # print(f"test 6-2: {result}")
-  # assert result==6
+  result = solve_problem2("test_input6", False)
+  print(f"test 6-2: {result}")
+  assert result==6
 
   result = solve_problem2("input6", True)
   print(f"problem 6-1: {result}")
