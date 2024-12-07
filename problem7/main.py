@@ -22,10 +22,10 @@ def parse_input(path):
 def construct_tree(root, nodes, include_concat):
 
   levels = [[] for _ in range(len(nodes)+1)]
-  levels[0] = [(str(root), None)]
-  # level nodes are tuples of the form (val, operation) where both are str/None
-  # val can be numerical or empty
-  # operation can be None, *, +, ||
+  levels[0] = [(str(root), "")]
+  # level nodes are tuples of the form (val, operation) where both are str
+  # val can be numerical or empty string
+  # operation can be *, +, || or empty string
 
   for indl, level in enumerate(levels[1:], start=1):
 
