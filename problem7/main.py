@@ -55,8 +55,7 @@ def solve_problem(file_name, include_concat):
     top = construct_tree(root, nodes[::-1], include_concat)
 
     if any((x[0]=='1' and x[1]=='*') or (x[0]=='0' and x[1]=='+') or
-           (x[0]=='' and x[1]=='||')
-           for x in top):
+           (x[0]=='' and x[1]=='||') for x in top):
 
       valid_roots.append(root)
 
