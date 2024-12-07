@@ -9,13 +9,6 @@ Created on Fri Dec  6 08:55:57 2024
 from pathlib import Path
 cwd = Path(__file__).parent
 
-class Node():
-
-  def __init__(self, val, op):
-
-    self.val = str(val)
-    self.op = op
-
 def parse_input(path):
 
   with path.open("r") as fp:
@@ -29,7 +22,10 @@ def parse_input(path):
 def construct_tree(root, nodes, include_concat):
 
   levels = [[] for _ in range(len(nodes)+1)]
-  levels[0] = [Node(root, None)]
+  levels[0] = [(str(root), None)]
+  # level nodes are tuples of the form (val, operation) where both are str/None
+  # val can be numerical or empty
+  # operation can be None, *, +, ||
 
   for indl, level in enumerate(levels[1:], start=1):
 
@@ -37,18 +33,17 @@ def construct_tree(root, nodes, include_concat):
 
     for elem in levels[indl-1]:
 
-      if elem.val=='':
+      if elem[0]=='':
         continue
 
-      if (a:=elem.val)[-len(str(node)):] == str(node) and include_concat:
-        levels[indl].append(Node(a[:-len(str(node))], "||"))
-      if (a:=int(elem.val))%(b:=int(node))==0:
-        levels[indl].append(Node(int(a/b), '*'))
-      if (a:=int(elem.val)) - (b:=int(node))>0:
-        levels[indl].append(Node(a - b, "+{node}"))
+      if elem[0][-len(str(node)):] == str(node) and include_concat:
+        levels[indl].append((elem[0][:-len(str(node))], "||"))
+      if (a:=int(elem[0]))%(b:=int(node))==0:
+        levels[indl].append((str(int(a/b)), '*'))
+      if (a:=int(elem[0])) - (b:=int(node))>0:
+        levels[indl].append((str(a - b), "+{node}"))
 
   return levels[-1]
-
 
 def solve_problem(file_name, include_concat):
 
@@ -59,8 +54,8 @@ def solve_problem(file_name, include_concat):
 
     top = construct_tree(root, nodes[::-1], include_concat)
 
-    if any((x.val=='1' and x.op=='*') or (x.val=='0' and x.op=='+') or
-           (x.val=='' and x.op=='||')
+    if any((x[0]=='1' and x[1]=='*') or (x[0]=='0' and x[1]=='+') or
+           (x[0]=='' and x[1]=='||')
            for x in top):
 
       valid_roots.append(root)
