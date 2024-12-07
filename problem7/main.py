@@ -41,7 +41,7 @@ def construct_tree(root, nodes, include_concat):
       if (a:=int(elem[0]))%(b:=int(node))==0:
         levels[indl].append((str(int(a/b)), '*'))
       if (a:=int(elem[0])) - (b:=int(node))>0:
-        levels[indl].append((str(a - b), "+{node}"))
+        levels[indl].append((str(a - b), "+"))
 
   return levels[-1]
 
