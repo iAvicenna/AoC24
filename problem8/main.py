@@ -46,7 +46,7 @@ def find_antinodes(antenna_type, city_map, max_ans=1):
 
   return valid_antinodes
 
-def solve_problem1(file_name):
+def solve_problem(file_name, max_antinodes):
   city_map = parse_input(Path(cwd, file_name))
 
   antenna_types = set(city_map.flatten()).difference(['.'])
@@ -54,36 +54,24 @@ def solve_problem1(file_name):
 
   for antenna_type in antenna_types:
 
-    antinodes += find_antinodes(antenna_type, city_map)
-
-  return len(set(antinodes))
-
-def solve_problem2(file_name):
-  city_map = parse_input(Path(cwd, file_name))
-
-  antenna_types = set(city_map.flatten()).difference(['.'])
-  antinodes = []
-
-  for antenna_type in antenna_types:
-
-    antinodes += find_antinodes(antenna_type, city_map, np.inf)
+    antinodes += find_antinodes(antenna_type, city_map, max_antinodes)
 
   return len(set(antinodes))
 
 if __name__ == "__main__":
 
-  result = solve_problem1("test_input8")
+  result = solve_problem("test_input8", 1)
   print(f"test 8-1: {result}")
   assert result==14
 
-  result = solve_problem1("input8")
+  result = solve_problem("input8", 1)
   print(f"problem 8-1: {result}")
   assert result==426
 
-  result = solve_problem2("test_input8")
+  result = solve_problem("test_input8", np.inf)
   print(f"test 8-2: {result}")
   assert result==34
 
-  result = solve_problem2("input8")
+  result = solve_problem("input8", np.inf)
   print(f"problem 8-2: {result}")
   assert result==1359
