@@ -71,9 +71,9 @@ if __name__ == "__main__":
   print(f"problem 7-1: {result}")
 
   result = solve_problem("test_input7", True)
-  print(f"test 7-1: {result}")
+  print(f"test 7-2: {result}")
   assert result==11387
 
   result = solve_problem("input7", True)
-  print(f"problem 7-1: {result}")
+  print(f"problem 7-2: {result}")
   assert result==110365987435001
