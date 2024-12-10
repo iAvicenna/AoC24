@@ -60,7 +60,6 @@ def solve_problem1(file_name):
       counter += len([ind0 for ind0 in range(0, len(r), 4)
                       if "".join(convs[ind0:ind0+4])==target])
 
-
   return counter
 
 

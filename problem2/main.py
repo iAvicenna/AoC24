@@ -14,7 +14,6 @@ cwd = Path(__file__).parent
 def parse_file(path):
 
   process = lambda x: list(map(int, x.strip("\n").split()))
-  
   with path.open("r") as fp:
     reports = list(map(process,fp))
 

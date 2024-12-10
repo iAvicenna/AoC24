@@ -53,7 +53,6 @@ def solve_problem(file_name, max_antinodes):
   antinodes = []
 
   for antenna_type in antenna_types:
-
     antinodes += find_antinodes(antenna_type, city_map, max_antinodes)
 
   return len(set(antinodes))
