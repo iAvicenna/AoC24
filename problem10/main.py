@@ -90,6 +90,8 @@ if __name__ == "__main__":
   ntargets, ntrails = solve_problem("test_input10", False)
   print(f"test 10-1: {ntargets}")
   print(f"test 10-2: {ntrails}")
+  assert ntargets==36
+  assert ntrails==81
 
   ntargets, ntrails = solve_problem("input10", False)
   print(f"problem 10-1: {ntargets}")
