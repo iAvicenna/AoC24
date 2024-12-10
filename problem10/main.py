@@ -76,19 +76,20 @@ def solve_problem(file_name):
   trees = construct_trees(grid)
   trails = trace_back(trees, grid)
   ntrails = len(set(trails))
-  ntargets = sum([len(set([tuple(x.coord) for x in levels[-2]])) for levels in trees])
+  nreached = sum([len(set([tuple(x.coord) for x in levels[-2]])) for levels in trees])
 
-  return ntargets, ntrails
+  return nreached, ntrails
 
 if __name__ == "__main__":
 
-  ntargets, ntrails = solve_problem("test_input10", False)
-  print(f"test 10-1: {ntargets}")
+  nreached, ntrails = solve_problem("test_input10")
+  print(f"test 10-1: {nreached}")
   print(f"test 10-2: {ntrails}")
-  assert ntargets==36
+  assert nreached==36
+  assert ntrails==81
 
-  ntargets, ntrails = solve_problem("input10", False)
-  print(f"problem 10-1: {ntargets}")
+  nreached, ntrails = solve_problem("input10")
+  print(f"problem 10-1: {nreached}")
   print(f"problem 10-2: {ntrails}")
-  assert  ntargets==746
+  assert  nreached==746
   assert ntrails==1541
