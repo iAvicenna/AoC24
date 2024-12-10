@@ -53,11 +53,11 @@ def construct_tree_paths(grid):
 
   return trees
 
-def trace_back(trees, grid):
+def trace_back(tree_paths, grid):
 
   paths = []
 
-  for levels in trees:
+  for levels in tree_paths:
     for node in levels[-2]:
 
       path = ""
@@ -72,10 +72,11 @@ def trace_back(trees, grid):
 def solve_problem(file_name):
 
   grid = parse_input(Path(cwd, file_name))
-  trees = construct_tree_paths(grid)
-  trails = trace_back(trees, grid)
+  tree_paths = construct_tree_paths(grid)
+  trails = trace_back(tree_paths, grid)
   ntrails = len(set(trails))
-  nreached = sum([len(set([tuple(x.coord) for x in levels[-2]])) for levels in trees])
+  nreached = sum([len(set([tuple(x.coord) for x in levels[-2]]))
+                  for levels in tree_paths])
 
   return nreached, ntrails
 
