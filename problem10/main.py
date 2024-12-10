@@ -62,12 +62,10 @@ def trace_back(trees, grid):
     for node in levels[-2]:
 
       path = ""
-
       while node is not None:
         coord = ",".join(node.coord.astype(str))
         path += f"{coord} "
         node = node.parent
-
       paths.append(path)
 
   return paths
@@ -75,12 +73,9 @@ def trace_back(trees, grid):
 def solve_problem(file_name):
 
   grid = parse_input(Path(cwd, file_name))
-
   trees = construct_trees(grid)
-
   trails = trace_back(trees, grid)
   ntrails = len(set(trails))
-
   ntargets = sum([len(set([tuple(x.coord) for x in levels[-2]])) for levels in trees])
 
   return ntargets, ntrails
