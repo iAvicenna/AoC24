@@ -32,12 +32,11 @@ def find_neighbours(node_pos, grid):
 
   I = list(filter(lambda x: all([c>=0 and o-c>0 for c,o in zip(x,grid.shape)]),
                   list(cross + node_pos)))
-  I = tuple([[x[0] for x in I], [x[1] for x in I]])
 
-  candidates = grid[I]
+  candidates = grid[tuple(np.array(I).T)]
   J = np.argwhere(candidates-grid[tuple(node_pos)]==1).flatten()
 
-  return list(np.array(I)[:, J].T)
+  return list(np.array(I).T[:, J].T)
 
 def construct_trees(grid):
 
