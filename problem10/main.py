@@ -38,7 +38,7 @@ def find_neighbours(node_pos, grid):
 
   return list(np.array(I).T[:, J].T)
 
-def construct_trees(grid):
+def construct_tree_paths(grid):
 
   roots = list(np.argwhere(grid==0))
   trees = []
@@ -72,7 +72,7 @@ def trace_back(trees, grid):
 def solve_problem(file_name):
 
   grid = parse_input(Path(cwd, file_name))
-  trees = construct_trees(grid)
+  trees = construct_tree_paths(grid)
   trails = trace_back(trees, grid)
   ntrails = len(set(trails))
   nreached = sum([len(set([tuple(x.coord) for x in levels[-2]])) for levels in trees])
