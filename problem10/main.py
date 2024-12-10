@@ -11,15 +11,9 @@ from pathlib import Path
 
 cwd = Path(__file__).parent
 
-def parse_input(file_path):
-
-  with file_path.open("r") as fp:
-    data = list(map(list, fp.read().splitlines()))
-
-  return np.array(data, dtype=int)
+cross = np.array([[-1,0],[1,0],[0,-1],[0,1]])
 
 class Node():
-
   def __init__(self, coord, parent):
     self.coord = coord
     self.parent = parent
@@ -27,17 +21,18 @@ class Node():
   def __repr__(self):
     return f"{self.coord}"
 
+def parse_input(file_path):
+
+  with file_path.open("r") as fp:
+    data = list(map(list, fp.read().splitlines()))
+
+  return np.array(data, dtype=int)
+
 def find_neighbours(node_pos, grid):
 
-  Ix = list(range(node_pos[0]-1, node_pos[0]+2)) + [node_pos[0] for _ in range(3)]
-  Iy = [node_pos[1] for _ in range(3)] + list(range(node_pos[1]-1,node_pos[1]+2))
-
-  I = list(filter(lambda x: x[0]>=0 and x[0]<grid.shape[0] and
-                  x[1]>=0 and x[1]<grid.shape[1], zip(Ix, Iy)))
+  I = list(filter(lambda x: all([c>=0 and o-c>0 for c,o in zip(x,grid.shape)]),
+                  list(cross + node_pos)))
   I = tuple([[x[0] for x in I], [x[1] for x in I]])
-
-  if len(I[0])==0:
-    return []
 
   candidates = grid[I]
   J = np.argwhere(candidates-grid[tuple(node_pos)]==1).flatten()
@@ -68,13 +63,10 @@ def reconstruct_trails(trees, grid):
 
       path = ""
 
-      while node.parent is not None:
+      while node is not None:
         coord = ",".join(node.coord.astype(str))
         path += f"{coord} "
         node = node.parent
-
-      coord = ",".join(node.coord.astype(str))
-      path += f"{coord} "
 
       paths.append(path)
 
@@ -102,3 +94,5 @@ if __name__ == "__main__":
   ntargets, ntrails = solve_problem("input10", False)
   print(f"problem 10-1: {ntargets}")
   print(f"problem 10-2: {ntrails}")
+  assert  ntargets==746
+  assert ntrails==1541
