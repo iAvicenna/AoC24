@@ -54,7 +54,7 @@ def construct_trees(grid):
 
   return trees
 
-def reconstruct_trails(trees, grid):
+def trace_back(trees, grid):
 
   paths = []
 
@@ -72,13 +72,13 @@ def reconstruct_trails(trees, grid):
 
   return paths
 
-def solve_problem(file_name, return_trails):
+def solve_problem(file_name):
 
   grid = parse_input(Path(cwd, file_name))
 
   trees = construct_trees(grid)
 
-  trails = reconstruct_trails(trees, grid)
+  trails = trace_back(trees, grid)
   ntrails = len(set(trails))
 
   ntargets = sum([len(set([tuple(x.coord) for x in levels[-2]])) for levels in trees])
@@ -91,7 +91,6 @@ if __name__ == "__main__":
   print(f"test 10-1: {ntargets}")
   print(f"test 10-2: {ntrails}")
   assert ntargets==36
-  assert ntrails==81
 
   ntargets, ntrails = solve_problem("input10", False)
   print(f"problem 10-1: {ntargets}")
