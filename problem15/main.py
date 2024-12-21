@@ -9,9 +9,7 @@ Created on Wed Dec 12 08:35:10 2024
 import numpy as np
 from pathlib import Path
 from itertools import takewhile
-from networkx import Graph
 cwd = Path(__file__).parent
-
 
 dir_to_nrots = {'>':0, 'v':1, '<':2, '^':3}
 rotate_dir = {'>':'^', '^':'<', '<':'v', 'v':'>'}
@@ -19,9 +17,7 @@ rotate_box = {'[':'⎵', ']':'⎴', '⎵':']', '⎴':'['}
 rotate_box_inv = {y:x for x,y in rotate_box.items()}
 connect = {'[':[0,1], ']':[0,-1], '⎵':[1,0], '⎴':[-1,0]}
 
-
 def parse_input(file_path, extend=False):
-
 
   process = lambda x: x.strip("\n")
 
@@ -46,14 +42,12 @@ def parse_input(file_path, extend=False):
 
   return warehouse_map, instructions
 
-
 def rotate_direction(direction, nrots):
 
   for _ in range(nrots%4):
     direction = rotate_dir[direction]
 
   return direction
-
 
 def rotate_map(rpos, wmap, direction):
   '''
@@ -107,7 +101,6 @@ def push(lane, nmove):
 
   return lane
 
-
 def move(wmap, rpos, ndirections):
 
   direction = rotate_direction(ndirections[0], wmap[1])
@@ -128,13 +121,6 @@ def move(wmap, rpos, ndirections):
   rpos[1] += max_nmove
 
   return rwmap, rpos
-
-
-def printwmap(wmap):
-
-  for i in range(wmap.shape[0]):
-    print(''.join(wmap[i,:]))
-
 
 def construct_graph(wmap):
 
@@ -177,14 +163,12 @@ def construct_graph(wmap):
 
   return np.array([x for nodes in col_nodes for x in nodes]), blocked
 
-
 def move_graph(wmap, rpos, ndirections):
 
   direction = rotate_direction(ndirections[0], wmap[1])
   nmove = len(ndirections)
 
   rpos, rwmap, rdir = rotate_map(rpos, wmap, direction)
-
 
   for i in range(nmove):
 
@@ -199,9 +183,7 @@ def move_graph(wmap, rpos, ndirections):
     rwmap[0][tuple(nodes.T)] = '.'
     rwmap[0][tuple(next_nodes.T)] = syms
 
-
   return rwmap, rpos
-
 
 def solve_problem1(file_name):
 
@@ -210,12 +192,9 @@ def solve_problem1(file_name):
   rpos = np.argwhere(wmap[0]=='@')[0,:]
 
   while len(inst)>0:
-
     ndirections = list(takewhile(lambda x: x == inst[0], inst))
     inst = inst[len(ndirections):]
-
     wmap, rpos = move(wmap, rpos, ndirections)
-
 
   rmap = invert_rotations(wmap)
 
@@ -229,11 +208,10 @@ def solve_problem2(file_name):
   wmap, inst = parse_input(Path(cwd, file_name), True)
   wmap = (wmap, 0) #map and number of rotations
   rpos = np.argwhere(wmap[0]=='@')[0,:]
-  while len(inst)>0:
 
+  while len(inst)>0:
     ndirections = list(takewhile(lambda x: x == inst[0], inst))
     inst = inst[len(ndirections):]
-
     wmap, rpos = move_graph(wmap, rpos, ndirections)
 
   rmap = invert_rotations(wmap)
@@ -241,7 +219,6 @@ def solve_problem2(file_name):
   gps_coords = box_coords*np.array([100, 1])
 
   return np.sum(gps_coords)
-
 
 if __name__ == "__main__":
 
@@ -255,6 +232,7 @@ if __name__ == "__main__":
 
   result = solve_problem1("input15")
   print(f"problem 15-1 result: {result}")
+  assert result==1360570
 
   result = solve_problem2("test_input15-2")
   print(f"test15-3 result: {result}")
