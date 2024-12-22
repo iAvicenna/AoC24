@@ -24,10 +24,10 @@ def get_admissible_dirs(i0,i1, maze):
 
   dirs = []
 
-  if maze[i0,i1] == 'S':
-    return ['S']
-  if maze[i0,i1] == 'E':
-    return ['E']
+  # start and end don't have directions I need to keep track of
+  # for end it does not matter for start it is always >
+  if maze[i0,i1] in ['S','E']:
+    return [maze[i0,i1]]
 
   if i0>0 and maze[i0-1,i1] != '#':
     dirs.append('^')
