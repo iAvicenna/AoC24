@@ -45,6 +45,7 @@ def solve_problem(file_name, nblinks):
 
       last_nodes = new_nodes
       counter += 1
+
     nvals += sum(last_nodes.values())
 
   return nvals

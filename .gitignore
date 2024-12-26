@@ -1,5 +1,8 @@
 #
 *input*
+*main_test*
+AoC_utils.py
+template.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
