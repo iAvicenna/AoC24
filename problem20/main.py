@@ -8,9 +8,9 @@ Created on Thu Dec 26 08:46:53 2024
 
 import numpy as np
 import networkx as nx
-from collections import Counter
 from pathlib import Path
-
+from math import comb
+from collections import defaultdict
 
 cwd = Path(__file__).parent.resolve()
 _Ad = ['S','E','.']
@@ -20,7 +20,6 @@ def parse_input(file_path):
     racetrack = np.array([list(x.strip()) for x in fp.readlines()], dtype=object)
 
   return racetrack
-
 
 def connect(i0, i1, racetrack, graph):
 
@@ -32,7 +31,6 @@ def connect(i0, i1, racetrack, graph):
     if j0>=0 and j1>=0 and j0<racetrack.shape[0] and j1<racetrack.shape[1] and\
       racetrack[j0, j1] in _Ad and ((j0,j1),(i0,i1)) not in graph.edges:
         graph.add_edge((j0,j1), (i0, i1))
-
 
 def construct_graph(racetrack):
 
@@ -48,7 +46,6 @@ def construct_graph(racetrack):
       connect(i0, i1, racetrack, graph)
 
   return graph
-
 
 def admissible_obstacles(racetrack):
 
@@ -68,8 +65,7 @@ def admissible_obstacles(racetrack):
 
   return adm_obs_idx
 
-
-def solve_problem1(file_name):
+def solve_problem(file_name, threshold):
 
   racetrack = parse_input(Path(cwd, file_name))
   s = tuple(np.argwhere(racetrack=='S')[0])
@@ -77,29 +73,30 @@ def solve_problem1(file_name):
   graph = construct_graph(racetrack)
   path = list(nx.shortest_path(graph, s, e))
 
-  idx = admissible_obstacles(racetrack)
+  dif_counter = defaultdict(int)
 
-  dif_lens = []
-  counter = 0
+  for indp0,(irow,icol) in enumerate(path):
 
-  for i0,i1 in idx:
+    I = [(abs(i0-irow), abs(i1-icol), indp1, dist) for indp1,(i0,i1)
+         in enumerate(path[indp0+1:], start=indp0+1)
+         if (dist:=abs(i0-irow) + abs(i1-icol)) <= threshold
+         and path[indp0+dist] != (irow,icol)]
 
-    graph.add_node((i0,i1))
-    connect(i0, i1, racetrack, graph)
+    npaths = [comb(x+y,y) for x,y,_,_ in I]
+    difs = [abs(indp0-indp1) - d for _,_,indp1,d in I]
 
-    dif_lens.append(len(path) - nx.shortest_path_length(graph, s, e))
+    for indd,(dif,npath) in enumerate(zip(difs, npaths)):
 
-    graph.remove_node((i0,i1))
+      dif_counter[int(dif)] += 1
 
-    counter += 1
-
-  dif_lens = Counter(dif_lens)
-
-  return sum([dif_lens[x] for x in dif_lens if x>=100])
-
+  return sum([dif_counter[x] for x in dif_counter if x>=100])
 
 if __name__ == "__main__":
 
-  result = solve_problem1("input20")
-  print(f"problem 20 result: {result}")
+  result = solve_problem("input20", 2)
+  print(f"problem 20-1 result: {result}")
   assert result==1197
+
+  result = solve_problem("input20", 20)
+  print(f"problem 20-2 result: {result}")
+  assert result==944910
