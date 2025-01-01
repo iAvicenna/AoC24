@@ -213,7 +213,8 @@ def solve_problem1(file_name, n1, n2):
       shortest_dict[(let1, let2)] = list(nx.all_shortest_paths(graph1, f'o{let1}', f'o{let2}'))
 
   # not very proud but a case by case analysis to reduce the search
-  # space resulted in these
+  # space resulted in these. these are chosen to reduce the search space
+  # while still satisfying test cases
   if ('3','7') in shortest_dict:
     shortest_dict[('3','7')] = shortest_dict[('3','7')][0:1]
   if ('A', '7') in shortest_dict:
@@ -257,6 +258,9 @@ def solve_problem1(file_name, n1, n2):
       if let1==let2:
         continue
       shortest_dict[(let1, let2)] = list(nx.all_shortest_paths(graph2, f'o{let1}', f'o{let2}'))
+
+  # same as above, reducing search space by case by case analysis which leaves
+  # test cases still satisfied
 
   shortest_dict[('<', 'o')] = shortest_dict[('<', 'o')][0:1]
   shortest_dict[('^', '>')] = shortest_dict[('^', '>')][1:2]
